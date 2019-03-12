@@ -23,16 +23,16 @@ public class SiteServiceImpl implements SiteService {
 
     private final static Logger logger = LoggerFactory.getLogger(SiteService.class);
 
-    public SiteServiceImpl(CaptorService captorService,  ResourceLoader resourceLoader){
-        logger.debug("Init SiteServiceImpl :",this);
+    public SiteServiceImpl(CaptorService captorService, ResourceLoader resourceLoader) {
+        logger.debug("Init SiteServiceImpl :", this);
         this.captorService = captorService;
-        this.resourceLoader=resourceLoader;
+        this.resourceLoader = resourceLoader;
     }
 
     @Override
     @Monitored
     public Site findById(String siteId) {
-        logger.debug("Appel de findById :",this);
+        logger.debug("Appel de findById :", this);
         if (siteId == null) {
             return null;
         }
@@ -43,18 +43,5 @@ public class SiteServiceImpl implements SiteService {
         return site;
     }
 
-    @Override
-    public void readFile(String path) {
-        Resource resource = resourceLoader.getResource("classpath:lorem.txt");
 
-        try (InputStream stream = resource.getInputStream()) {
-            Scanner scanner = new Scanner(stream).useDelimiter("\\n");
-            while (scanner.hasNext()) {
-                System.out.println(scanner.next());
-            }
-        }
-        catch (IOException e) {
-            logger.error("Erreur sur chargement fichier", e);
-        }
-    }
 }

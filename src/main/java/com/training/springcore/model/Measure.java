@@ -8,6 +8,7 @@ public class Measure {
     private Instant instant;
     private Integer valueInWatt;
     private Captor captor;
+    private Long id;
 
     /**
      * Constructeur to use with required property
@@ -44,6 +45,14 @@ public class Measure {
 
     public void setCaptor(Captor captor) {
         this.captor = captor;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override

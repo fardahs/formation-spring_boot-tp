@@ -1,10 +1,6 @@
 package com.training.springcore.config.properties;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
 
-@Component
-@ConfigurationProperties(prefix = "bigcorp")
 public class BigCorpApplicationMeasureProperties {
 
     private int defaultFixed;
