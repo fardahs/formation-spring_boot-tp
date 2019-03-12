@@ -1,6 +1,5 @@
 package com.training.springcore;
 
-import com.training.springcore.config.BigCorpApplicationConfig;
 import com.training.springcore.model.ApplicationInfo;
 import com.training.springcore.service.SiteService;
 import org.springframework.boot.SpringApplication;
