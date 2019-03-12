@@ -12,7 +12,7 @@ public class BigcorpApplication {
 
 	public static void main(String[] args) {
 
-		ApplicationContext context = SpringApplication.run(BigCorpApplicationConfig.class, args);
+		ApplicationContext context = SpringApplication.run(BigcorpApplication.class, args);
 		ApplicationInfo applicationInfo = context.getBean(ApplicationInfo.class);
 		System.out.println("========================================================================");
 		System.out.println("Application [" + applicationInfo.getName() + "] - version: " + applicationInfo.getVersion());
