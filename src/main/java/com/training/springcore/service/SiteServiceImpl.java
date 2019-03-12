@@ -2,6 +2,8 @@ package com.training.springcore.service;
 
 import com.training.springcore.config.Monitored;
 import com.training.springcore.model.Site;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -19,8 +21,10 @@ public class SiteServiceImpl implements SiteService {
 
     private CaptorService captorService;
 
+    private final static Logger logger = LoggerFactory.getLogger(SiteService.class);
+
     public SiteServiceImpl(CaptorService captorService,  ResourceLoader resourceLoader){
-        System.out.println("Init SiteServiceImpl :" + this);
+        logger.debug("Init SiteServiceImpl :",this);
         this.captorService = captorService;
         this.resourceLoader=resourceLoader;
     }
@@ -28,7 +32,7 @@ public class SiteServiceImpl implements SiteService {
     @Override
     @Monitored
     public Site findById(String siteId) {
-        System.out.println("Appel de findById :" + this);
+        logger.debug("Appel de findById :",this);
         if (siteId == null) {
             return null;
         }
@@ -50,7 +54,7 @@ public class SiteServiceImpl implements SiteService {
             }
         }
         catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Erreur sur chargement fichier", e);
         }
     }
 }

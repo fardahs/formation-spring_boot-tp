@@ -8,6 +8,7 @@ import com.training.springcore.service.measure.RealMeasureService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -28,8 +29,9 @@ public class RealMeasureServiceTest {
     private RealMeasureService service;
 
     @Configuration
-    @ComponentScan("com.training.springcore.service")
+    @ComponentScan({"com.training.springcore.service.measure","com.training.springcore.config.properties"})
     @PropertySource("classpath:application.properties")
+    @EnableConfigurationProperties
     public static class MeasureServiceConfigurationTest {
     }
 
