@@ -1,7 +1,8 @@
 package com.training.springcore.repository;
 
-import com.training.springcore.model.Site;
+import com.training.springcore.model.Measure;
 
-public interface MeasureDao extends CrudDao<Site, Long> {
+
+public interface MeasureDao extends CrudDao<Measure, Long> {
 
 }

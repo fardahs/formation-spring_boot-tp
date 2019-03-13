@@ -43,6 +43,7 @@ public class Captor {
     /**
      * Constructor to use with required property
      * @param name
+     * @param site
      */
     public Captor(String name, Site site) {
         this.name = name;

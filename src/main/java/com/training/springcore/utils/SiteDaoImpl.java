@@ -1,11 +1,12 @@
-package com.training.springcore.service;
+package com.training.springcore.utils;
 
-import com.training.springcore.model.Captor;
 import com.training.springcore.model.Site;
 import com.training.springcore.repository.SiteDao;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
+
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,20 +14,8 @@ import java.util.List;
 
 @Repository
 public class SiteDaoImpl implements SiteDao {
+
     private NamedParameterJdbcTemplate jdbcTemplate;
-
-    private static String SELECT_WITH_JOIN =
-            "SELECT c.id, c.name, c.site_id, s.name as site_name " +
-                    "FROM Captor c inner join Site s on c.site_id = s.id ";
-
-
-    private Site siteMapper(ResultSet rs, int rowNum) throws SQLException {
-        Site site = new Site(rs.getString("site_name"));
-        site.setId(rs.getString("site_id"));
-        Captor captor = new Captor(rs.getString("name"), site);
-        captor.setId(rs.getString("id"));
-        return site;
-    }
 
     public SiteDaoImpl(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -34,7 +23,7 @@ public class SiteDaoImpl implements SiteDao {
 
     @Override
     public void create(Site site) {
-         jdbcTemplate.update("insert into SITE (id, name) values (:id, :name)",
+        jdbcTemplate.update("insert into SITE (id, name) values (:id, :name)",
                 new MapSqlParameterSource()
                         .addValue("id", site.getId())
                         .addValue("name", site.getName()));
@@ -43,12 +32,21 @@ public class SiteDaoImpl implements SiteDao {
 
     @Override
     public Site findById(String s) {
-        return null;
+
+        try {
+            return jdbcTemplate.queryForObject("select * from SITE where id = :id ",
+                    new MapSqlParameterSource("id", s),
+                    this::siteMapper);
+        }catch (EmptyResultDataAccessException e){
+            return null;
+
+        }
     }
 
     @Override
     public List<Site> findAll() {
-        return jdbcTemplate.query(SELECT_WITH_JOIN, this::siteMapper);
+        return jdbcTemplate.query("select id, name from SITE",
+                this::siteMapper);
     }
 
     @Override
@@ -61,9 +59,15 @@ public class SiteDaoImpl implements SiteDao {
 
     @Override
     public void deleteById(String s) {
+        jdbcTemplate.update("delete from SITE where id =:id",
+                new MapSqlParameterSource("id", s));
 
     }
 
-
+    private Site siteMapper(ResultSet rs, int rowNum) throws SQLException {
+        Site site = new Site(rs.getString("name"));
+        site.setId(rs.getString("id"));
+        return site;
+    }
 
 }

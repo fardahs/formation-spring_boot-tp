@@ -2,13 +2,11 @@ package com.training.springcore.service;
 
 import com.training.springcore.config.Monitored;
 import com.training.springcore.model.Captor;
-import com.training.springcore.model.PowerSource;
 import com.training.springcore.repository.CaptorDao;
 import com.training.springcore.service.measure.MeasureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -35,6 +33,6 @@ public class CaptorServiceImpl implements CaptorService{
     @Monitored
     public Set<Captor> findBySite(String siteId) {
 
-        return captorDao.findBySiteId(siteId).stream().collect(Collectors.toSet());
+        return captorDao.findByCaptorId(siteId).stream().collect(Collectors.toSet());
     }
 }
