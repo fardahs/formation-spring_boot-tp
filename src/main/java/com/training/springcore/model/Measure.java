@@ -1,15 +1,24 @@
 package com.training.springcore.model;
 
+import javax.persistence.*;
 import java.time.Instant;
 import java.util.Objects;
 
+@Entity
 public class Measure {
 
-    private Instant instant;
-    private Integer valueInWatt;
-    private Captor captor;
+    @Id
+    @GeneratedValue
     private Long id;
+    @Column(nullable = false)
+    private Instant instant;
+    @Column(nullable = false)
+    private Integer valueInWatt;
 
+    @ManyToOne
+    private Captor captor;
+
+    public Measure(){}
     /**
      * Constructeur to use with required property
      *
@@ -17,6 +26,7 @@ public class Measure {
      * @param valueInWatt
      * @param captor
      */
+
     public Measure(Instant instant, Integer valueInWatt, Captor captor) {
         this.instant = instant;
         this.valueInWatt = valueInWatt;

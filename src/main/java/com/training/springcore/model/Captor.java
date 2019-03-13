@@ -1,28 +1,38 @@
 package com.training.springcore.model;
 
+import javax.persistence.*;
 import java.util.Objects;
 import java.util.UUID;
 
+@Entity
 public class Captor {
     /**
      * Captor id
      */
+    @Id
     private String id = UUID.randomUUID().toString();
 
     /**
      * Captor name
      */
+    @Column(nullable = false)
     private String name;
 
     /**
      * Power source
      */
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private PowerSource powerSource;
 
     /**
      * Site
      */
+
+    @ManyToOne
     private Site site;
+
+    private Integer defaultPowerInWatt;
 
     @Deprecated
     public Captor() {
@@ -79,6 +89,14 @@ public class Captor {
         this.site = site;
     }
 
+    public Integer getDefaultPowerInWatt() {
+        return defaultPowerInWatt;
+    }
+
+    public void setDefaultPowerInWatt(Integer defaultPowerInWatt) {
+        this.defaultPowerInWatt = defaultPowerInWatt;
+    }
+
     public void setPowerSource(PowerSource powerSource) {
         this.powerSource = powerSource;
     }
@@ -94,7 +112,7 @@ public class Captor {
     @Override
     public int hashCode() {
 
-        return Objects.hash(name, powerSource);
+        return Objects.hash(name, powerSource, defaultPowerInWatt, site, id);
     }
 
     @Override
@@ -103,6 +121,9 @@ public class Captor {
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", powerSource='" + powerSource + '\'' +
+                ", defaultPowerInWatt='" + defaultPowerInWatt + '\'' +
+                ", site='" + site + '\'' +
                 '}';
     }
+
 }

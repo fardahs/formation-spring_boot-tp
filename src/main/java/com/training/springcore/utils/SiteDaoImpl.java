@@ -8,6 +8,8 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -15,13 +17,15 @@ import java.util.List;
 @Repository
 public class SiteDaoImpl implements SiteDao {
 
+    @PersistenceContext
+    private EntityManager em;
     private NamedParameterJdbcTemplate jdbcTemplate;
 
     public SiteDaoImpl(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    @Override
+
     public void create(Site site) {
         jdbcTemplate.update("insert into SITE (id, name) values (:id, :name)",
                 new MapSqlParameterSource()
@@ -29,14 +33,21 @@ public class SiteDaoImpl implements SiteDao {
                         .addValue("name", site.getName()));
 
     }
+    @Override
+    public void persist(Site site) {
+        em.persist(site);
+    }
+
+    @Override
+    public void delete(Site site) {
+        em.remove(site);
+    }
 
     @Override
     public Site findById(String s) {
 
         try {
-            return jdbcTemplate.queryForObject("select * from SITE where id = :id ",
-                    new MapSqlParameterSource("id", s),
-                    this::siteMapper);
+            return em.find(Site.class,s);
         }catch (EmptyResultDataAccessException e){
             return null;
 
@@ -45,11 +56,10 @@ public class SiteDaoImpl implements SiteDao {
 
     @Override
     public List<Site> findAll() {
-        return jdbcTemplate.query("select id, name from SITE",
-                this::siteMapper);
+        return em.createQuery("select * from Site", Site.class).getResultList();
     }
 
-    @Override
+
     public void update(Site site) {
         jdbcTemplate.update("update SITE set name = :name where id =:id",
                 new MapSqlParameterSource()
@@ -57,7 +67,7 @@ public class SiteDaoImpl implements SiteDao {
                         .addValue("name", site.getName()));
     }
 
-    @Override
+
     public void deleteById(String s) {
         jdbcTemplate.update("delete from SITE where id =:id",
                 new MapSqlParameterSource("id", s));

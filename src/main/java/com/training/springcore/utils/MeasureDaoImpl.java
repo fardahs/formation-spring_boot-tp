@@ -10,12 +10,17 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
 @Repository
 public class MeasureDaoImpl implements MeasureDao {
+
+    @PersistenceContext
+    private EntityManager em;
 
     private NamedParameterJdbcTemplate jdbcTemplate;
     private H2DateConverter h2DateConverter;
@@ -29,9 +34,9 @@ public class MeasureDaoImpl implements MeasureDao {
             "SELECT m.id, m.instant, m.value_in_watt, m.captor_id, c.name as captor_name, c.site_id, s.name as site_name " +
                     "FROM Measure m inner join Captor c on m.captor_id=c.id inner join site s on c.site_id = s.id ";
 
-    @Override
+
     public void create(Measure measure) {
-        jdbcTemplate.update("insert into MEASURE (id,instant, value_in_watt, captor_id) values (:id, :instant, :value_in_watt, :captor_id)",
+        jdbcTemplate.update("insert into MEASURE (id,instant, value_in_watt, captor_id) values (:id, :instant, :value_in_waTt, :captor_id)",
                 new MapSqlParameterSource()
                         .addValue("id", measure.getId())
                         .addValue("instant", measure.getInstant())
@@ -44,8 +49,7 @@ public class MeasureDaoImpl implements MeasureDao {
     @Override
     public Measure findById(Long aLong) {
         try {
-            return jdbcTemplate.queryForObject(SELECT_WITH_JOIN + " where m.id = :id",
-                    new MapSqlParameterSource("id", aLong), this::measureMapper);
+           return em.find(Measure.class, aLong);
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
@@ -54,10 +58,10 @@ public class MeasureDaoImpl implements MeasureDao {
 
     @Override
     public List<Measure> findAll() {
-        return jdbcTemplate.query(SELECT_WITH_JOIN, this::measureMapper);
+        return em.createQuery("select m, c, s from Measure m inner join m.captor c inner join c.site s", Measure.class).getResultList();
     }
 
-    @Override
+
     public void update(Measure measure) {
         jdbcTemplate.update("update MEASURE set value_in_watt= :value_in_watt where id= :id",
                 new MapSqlParameterSource()
@@ -65,11 +69,19 @@ public class MeasureDaoImpl implements MeasureDao {
                         .addValue("value_in_watt", measure.getValueInWatt())
         );
     }
-
     @Override
+    public void persist(Measure measure) {
+        em.persist(measure);
+    }
+
     public void deleteById(Long aLong) {
         jdbcTemplate.update("delete from MEASURE where id =:id",
                 new MapSqlParameterSource("id", aLong));
+    }
+
+    @Override
+    public void delete(Measure measure) {
+        em.remove(measure);
     }
 
     private Measure measureMapper(ResultSet rs, int rowNum) throws SQLException {

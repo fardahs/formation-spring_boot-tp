@@ -9,12 +9,16 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
 @Repository
 public class CaptorDaoImpl implements CaptorDao {
+    @PersistenceContext
+    private EntityManager em;
 
     private NamedParameterJdbcTemplate jdbcTemplate;
 
@@ -29,10 +33,13 @@ public class CaptorDaoImpl implements CaptorDao {
     @Override
     public List<Captor> findByCaptorId(String captorId) {
 
-        return jdbcTemplate.query(SELECT_WITH_JOIN, this::captorMapper);
+        return em.createQuery("select c from Captor c inner join c.site s where s.id =:siteId", Captor.class)
+                .setParameter("siteId", captorId)
+                .getResultList();
+
     }
 
-    @Override
+
     public void create(Captor captor) {
         jdbcTemplate.update("insert into CAPTOR (id, name, site_id) values (:id, :name, :site_id)",
                 new MapSqlParameterSource()
@@ -43,11 +50,17 @@ public class CaptorDaoImpl implements CaptorDao {
 
 
     @Override
+    public void persist(Captor captor) {
+        em.persist(captor);
+    }
+
+
+
+    @Override
     public Captor findById(String s) {
 
         try {
-            return jdbcTemplate.queryForObject("select * from CAPTOR where id=:id",
-                    new MapSqlParameterSource("id", s), this::captorMapper);
+            return em.find(Captor.class, s);
         }catch (EmptyResultDataAccessException e){
             return null;
         }
@@ -57,10 +70,18 @@ public class CaptorDaoImpl implements CaptorDao {
     @Override
     public List<Captor> findAll() {
 
-        return jdbcTemplate.query(SELECT_WITH_JOIN, this::captorMapper);
+        return em.createQuery("select c from Captor c inner join c.site s",
+                Captor.class)
+                .getResultList();
     }
 
     @Override
+    public void delete(Captor captor) {
+        em.remove(captor);
+
+    }
+
+
     public void update(Captor captor) {
         jdbcTemplate.update("update CAPTOR set name = :name where id =:id",
                 new MapSqlParameterSource()
@@ -68,7 +89,7 @@ public class CaptorDaoImpl implements CaptorDao {
                         .addValue("name", captor.getName()));
     }
 
-    @Override
+
     public void deleteById(String s) {
         jdbcTemplate.update("delete from CAPTOR where id =:id",
                 new MapSqlParameterSource("id", s));
