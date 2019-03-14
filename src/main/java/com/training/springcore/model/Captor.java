@@ -19,7 +19,8 @@ public abstract class Captor {
     @Column(nullable = false)
     private String name;
 
-
+    @Version
+    private int version;
 
     /**
      * Site
@@ -73,6 +74,13 @@ public abstract class Captor {
     }
 
 
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
 
     public Site getSite() {
         return site;

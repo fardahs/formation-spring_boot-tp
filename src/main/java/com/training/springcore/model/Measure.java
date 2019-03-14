@@ -18,6 +18,9 @@ public class Measure {
     @ManyToOne
     private Captor captor;
 
+    @Version
+    private int version;
+
     public Measure(){}
     /**
      * Constructeur to use with required property
@@ -63,6 +66,14 @@ public class Measure {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 
     @Override
