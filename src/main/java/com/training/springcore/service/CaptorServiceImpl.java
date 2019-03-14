@@ -33,6 +33,6 @@ public class CaptorServiceImpl implements CaptorService{
     @Monitored
     public Set<Captor> findBySite(String siteId) {
 
-        return captorDao.findByCaptorId(siteId).stream().collect(Collectors.toSet());
+        return captorDao.findBySiteId(siteId).stream().collect(Collectors.toSet());
     }
 }

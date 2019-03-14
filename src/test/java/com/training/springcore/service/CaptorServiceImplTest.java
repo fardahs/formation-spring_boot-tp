@@ -47,7 +47,7 @@ public class CaptorServiceImplTest {
         String siteId = "siteId";
 
         Captor expectedCaptor = new Captor("Capteur A", new Site("Florange"));
-        Mockito.when(captorDao.findByCaptorId(siteId)).thenReturn(Arrays.asList(expectedCaptor));
+        Mockito.when(captorDao.findBySiteId(siteId)).thenReturn(Arrays.asList(expectedCaptor));
 
         // Appel du SUT
         Set<Captor> captors = captorService.findBySite(siteId);

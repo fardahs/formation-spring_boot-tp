@@ -80,7 +80,6 @@ public class Site {
         return "Site{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
-                ", captors=" + captors +
                 '}';
     }
 }
