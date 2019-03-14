@@ -50,6 +50,15 @@ public class Captor {
 
     }
 
+    public Captor(String id, String name, PowerSource powerSource, Site site, Integer defaultPowerInWatt) {
+        this.id = id;
+        this.name = name;
+        this.powerSource = powerSource;
+        this.site = site;
+        this.defaultPowerInWatt = defaultPowerInWatt;
+    }
+
+
     /**
      * Constructor to use with required property
      * @param name
