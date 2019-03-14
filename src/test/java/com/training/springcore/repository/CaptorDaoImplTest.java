@@ -2,6 +2,7 @@ package com.training.springcore.repository;
 
 import com.training.springcore.model.Captor;
 import com.training.springcore.model.FixedCaptor;
+import com.training.springcore.model.SimulatedCaptor;
 import com.training.springcore.model.Site;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.groups.Tuple;
@@ -19,6 +20,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
+import javax.validation.constraints.AssertTrue;
 import java.util.List;
 import java.util.Optional;
 
@@ -119,12 +121,13 @@ public class CaptorDaoImplTest {
 
     @Test
     public void findByExample() {
-        ExampleMatcher matcher = ExampleMatcher.matching()
-                .withMatcher("name", match -> match.ignoreCase().contains())
-                .withIgnoreNullValues();
-
         Captor captor = new FixedCaptor("Eolienne", site);
         captor.setId("c1");
+
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withMatcher("name", match -> match.ignoreCase().contains())
+                .withIgnorePaths("id")
+                .withIgnoreNullValues();
 
         List<Captor> captors = captorDao.findAll(Example.of(captor, matcher));
         Assertions.assertThat(captors)
@@ -152,5 +155,17 @@ public class CaptorDaoImplTest {
         Assertions.assertThatThrownBy(() -> captorDao.save(captor))
                 .isExactlyInstanceOf(ObjectOptimisticLockingFailureException.class);
     }
+
+    @Test
+    public void createSimulatedCaptorShouldThrowExceptionWhenMinMaxAreInvalid() {
+        Assertions
+                .assertThatThrownBy(() -> {
+                    captorDao.save(new SimulatedCaptor("Mon site", site, 10, 5));
+                    entityManager.flush();
+                })
+                .isExactlyInstanceOf(javax.validation.ConstraintViolationException.class)
+                .hasMessageContaining("minPowerInWatt should be less than maxPowerInWatt");
+    }
+
 
 }

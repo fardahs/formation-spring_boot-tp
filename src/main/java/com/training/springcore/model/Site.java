@@ -1,6 +1,9 @@
 package com.training.springcore.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.AssertTrue;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
@@ -15,7 +18,9 @@ public class Site {
     /**
      * Site name
      */
-    @Column(nullable = false)
+
+    @NotNull
+    @Size(min = 3, max = 100)
     private String name;
 
     /**
@@ -31,6 +36,15 @@ public class Site {
     public Site() {
         // Use for serializer or deserializer
     }
+
+    @AssertTrue(message = "must not be null")
+    public boolean isValid(){
+
+        return true;
+    }
+
+    @AssertTrue(message = "size must be between 3 and 100")
+
 
     /**
      * Constructor to use with required property

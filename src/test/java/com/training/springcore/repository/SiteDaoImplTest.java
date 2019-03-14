@@ -117,4 +117,26 @@ public class SiteDaoImplTest {
                 .isExactlyInstanceOf(ObjectOptimisticLockingFailureException.class);
     }
 
+    @Test
+    public void createShouldThrowExceptionWhenNameIsNull() {
+        Assertions
+                .assertThatThrownBy(() -> {
+                    siteDao.save(new Site(null));
+                    entityManager.flush();
+                })
+                .isExactlyInstanceOf(javax.validation.ConstraintViolationException.class)
+                .hasMessageContaining("must not be null");
+    }
+
+    @Test
+    public void createShouldThrowExceptionWhenNameSizeIsInvalid() {
+        Assertions
+                .assertThatThrownBy(() -> {
+                    siteDao.save(new Site("ee"));
+                    entityManager.flush();
+                })
+                .isExactlyInstanceOf(javax.validation.ConstraintViolationException.class)
+                .hasMessageContaining("size must be between 3 and 100");
+    }
+
 }
