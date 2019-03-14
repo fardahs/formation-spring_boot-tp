@@ -1,7 +1,7 @@
 package com.training.springcore.repository;
 
 import com.training.springcore.model.Captor;
-import com.training.springcore.model.PowerSource;
+import com.training.springcore.model.FixedCaptor;
 import com.training.springcore.model.Site;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.groups.Tuple;
@@ -67,8 +67,8 @@ public class CaptorDaoImplTest {
     @Test
     public void create() {
         Assertions.assertThat(captorDao.findAll()).hasSize(2);
-        Captor captor = new Captor("New captor", site);
-        captor.setPowerSource(PowerSource.SIMULATED);
+        Captor captor = new FixedCaptor("New captor", site);
+       // captor.setPowerSource(PowerSource.SIMULATED);
 
         captorDao.save(captor);
 
@@ -95,7 +95,7 @@ public class CaptorDaoImplTest {
 
     @Test
     public void deleteById() {
-        Captor newcaptor = new Captor("New captor", site);
+        Captor newcaptor = new FixedCaptor("New captor", site);
         captorDao.save(newcaptor);
         Assertions.assertThat(captorDao.findById(newcaptor.getId())).isNotEmpty();
         captorDao.delete(newcaptor);
@@ -122,7 +122,7 @@ public class CaptorDaoImplTest {
                 .withMatcher("name", match -> match.ignoreCase().contains())
                 .withIgnoreNullValues();
 
-        Captor captor = new Captor("Eolienne", site);
+        Captor captor = new FixedCaptor("Eolienne", site);
         captor.setId("c1");
 
         List<Captor> captors = captorDao.findAll(Example.of(captor, matcher));

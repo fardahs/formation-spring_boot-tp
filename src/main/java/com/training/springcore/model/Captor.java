@@ -5,7 +5,8 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-public class Captor {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public abstract class Captor {
     /**
      * Captor id
      */
@@ -18,12 +19,7 @@ public class Captor {
     @Column(nullable = false)
     private String name;
 
-    /**
-     * Power source
-     */
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private PowerSource powerSource;
+
 
     /**
      * Site
@@ -32,30 +28,20 @@ public class Captor {
     @ManyToOne
     private Site site;
 
-    private Integer defaultPowerInWatt;
 
     @Deprecated
     public Captor() {
         // Use for serializer or deserializer
     }
 
-    /**
-     * Constructor to use with required property
-     * @param name, power source
-     */
-    public Captor(String name, PowerSource powerSource) {
-        this.name = name;
-        this.powerSource = powerSource;
-        this.site = site;
 
-    }
 
-    public Captor(String id, String name, PowerSource powerSource, Site site, Integer defaultPowerInWatt) {
+    public Captor(String id, String name,  Site site) {
         this.id = id;
         this.name = name;
-        this.powerSource = powerSource;
+
         this.site = site;
-        this.defaultPowerInWatt = defaultPowerInWatt;
+
     }
 
 
@@ -86,9 +72,7 @@ public class Captor {
         this.name = name;
     }
 
-    public PowerSource getPowerSource() {
-        return powerSource;
-    }
+
 
     public Site getSite() {
         return site;
@@ -98,30 +82,24 @@ public class Captor {
         this.site = site;
     }
 
-    public Integer getDefaultPowerInWatt() {
-        return defaultPowerInWatt;
-    }
 
-    public void setDefaultPowerInWatt(Integer defaultPowerInWatt) {
-        this.defaultPowerInWatt = defaultPowerInWatt;
-    }
 
-    public void setPowerSource(PowerSource powerSource) {
-        this.powerSource = powerSource;
-    }
+
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Captor site = (Captor) o;
-        return Objects.equals(name, site.name) && Objects.equals(powerSource, site.powerSource);
+        return Objects.equals(name, site.name) ;
     }
 
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(name, powerSource, defaultPowerInWatt, site, id);
+        return Objects.hash(name,  site, id);
     }
 
     @Override
@@ -129,8 +107,6 @@ public class Captor {
         return "Captor{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
-                ", powerSource='" + powerSource + '\'' +
-                ", defaultPowerInWatt='" + defaultPowerInWatt + '\'' +
                 ", site='" + site + '\'' +
                 '}';
     }
