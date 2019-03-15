@@ -26,7 +26,9 @@ public class Measure {
     @Version
     private int version;
 
-    public Measure(){}
+    public Measure() {
+    }
+
     /**
      * Constructeur to use with required property
      *
@@ -34,7 +36,6 @@ public class Measure {
      * @param valueInWatt
      * @param captor
      */
-
     public Measure(Instant instant, Integer valueInWatt, Captor captor) {
         this.instant = instant;
         this.valueInWatt = valueInWatt;

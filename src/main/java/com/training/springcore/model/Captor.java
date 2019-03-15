@@ -13,7 +13,7 @@ public abstract class Captor {
      * Captor id
      */
     @Id
-    private String id = UUID.randomUUID().toString();
+    private String id;
 
     /**
      * Captor name
@@ -28,29 +28,28 @@ public abstract class Captor {
     /**
      * Site
      */
-
     @ManyToOne
     private Site site;
 
+    @Enumerated(EnumType.STRING)
+    @NotNull
+    private PowerSource powerSource;
 
-    @Deprecated
     public Captor() {
         // Use for serializer or deserializer
     }
 
 
-
-    public Captor(String id, String name,  Site site) {
+    public Captor(String id, String name, Site site) {
         this.id = id;
         this.name = name;
-
         this.site = site;
 
     }
 
-
     /**
      * Constructor to use with required property
+     *
      * @param name
      * @param site
      */
@@ -58,6 +57,17 @@ public abstract class Captor {
         this.name = name;
         this.site = site;
 
+    }
+
+    public Captor(String name, Site site, PowerSource powerSource) {
+        this.name = name;
+        this.site = site;
+        this.powerSource = powerSource;
+    }
+
+    @PrePersist
+    public void generateId() {
+        this.id = UUID.randomUUID().toString();
     }
 
     public String getId() {
@@ -93,24 +103,25 @@ public abstract class Captor {
         this.site = site;
     }
 
+    public PowerSource getPowerSource() {
+        return powerSource;
+    }
 
-
-
-
+    public void setPowerSource(PowerSource powerSource) {
+        this.powerSource = powerSource;
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Captor site = (Captor) o;
-        return Objects.equals(name, site.name) ;
+        return Objects.equals(name, site.name);
     }
-
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(name,  site, id);
+        return Objects.hash(name, site, id);
     }
 
     @Override

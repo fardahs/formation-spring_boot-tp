@@ -1,9 +1,6 @@
 package com.training.springcore.repository;
 
-import com.training.springcore.model.Captor;
-import com.training.springcore.model.FixedCaptor;
-import com.training.springcore.model.SimulatedCaptor;
-import com.training.springcore.model.Site;
+import com.training.springcore.model.*;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.groups.Tuple;
 import org.hibernate.exception.ConstraintViolationException;
@@ -20,7 +17,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
-import javax.validation.constraints.AssertTrue;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,6 +32,10 @@ public class CaptorDaoImplTest {
 
     @Autowired
     private EntityManager entityManager;
+    @Autowired
+    private MeasureDao measureDao;
+    @Autowired
+    private SiteDao siteDao;
 
     @Before
     public void init() {
@@ -71,7 +71,7 @@ public class CaptorDaoImplTest {
     public void create() {
         Assertions.assertThat(captorDao.findAll()).hasSize(2);
         Captor captor = new FixedCaptor("New captor", site);
-       // captor.setPowerSource(PowerSource.SIMULATED);
+        captor.setPowerSource(PowerSource.SIMULATED);
 
         captorDao.save(captor);
 
@@ -165,6 +165,15 @@ public class CaptorDaoImplTest {
                 })
                 .isExactlyInstanceOf(javax.validation.ConstraintViolationException.class)
                 .hasMessageContaining("minPowerInWatt should be less than maxPowerInWatt");
+    }
+
+    @Test
+    public void deleteBySiteId() {
+        Assertions.assertThat(captorDao.findBySiteId("site1")).hasSize(2);
+        measureDao.deleteAll();
+        captorDao.deleteBySiteId("site1");
+        siteDao.delete(site);
+        Assertions.assertThat(captorDao.findBySiteId("site1")).isEmpty();
     }
 
 

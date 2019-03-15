@@ -1,9 +1,6 @@
 package com.training.springcore.repository;
 
-import com.training.springcore.model.Captor;
-import com.training.springcore.model.Measure;
-import com.training.springcore.model.RealCaptor;
-import com.training.springcore.model.Site;
+import com.training.springcore.model.*;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -60,6 +57,7 @@ public class MeasureDaoImplTest {
     public void create() {
         Captor captor = new RealCaptor("Eolienne", new Site("site"));
         captor.setId("c1");
+        captor.setPowerSource(PowerSource.REAL);
         Assertions.assertThat(measureDao.findAll()).hasSize(10);
         measureDao.save(new Measure(Instant.now(), 2_333_666, captor));
         Assertions.assertThat(measureDao.findAll()).hasSize(11);
@@ -107,6 +105,15 @@ public class MeasureDaoImplTest {
 // à 0 je dois avoir une exception
         Assertions.assertThatThrownBy(() -> measureDao.save(measure))
                 .isExactlyInstanceOf(ObjectOptimisticLockingFailureException.class);
+    }
+
+    @Test
+    public void deleteByCaptorId() {
+        Assertions.assertThat(measureDao.findAll().stream().filter(m ->
+                m.getCaptor().getId().equals("c1"))).hasSize(5);
+        measureDao.deleteByCaptorId("c1");
+        Assertions.assertThat(measureDao.findAll().stream().filter(m ->
+                m.getCaptor().getId().equals("c1"))).isEmpty();
     }
 
 }

@@ -8,27 +8,19 @@ import javax.validation.constraints.NotNull;
 @Entity
 @DiscriminatorValue("SIMULATED")
 public class SimulatedCaptor extends Captor {
+
     @NotNull
     private Integer minPowerInWatt;
     @NotNull
     private Integer maxPowerInWatt;
 
-
     @Deprecated
     public SimulatedCaptor() {
-        super();
-// used only by serializer and deserializer
-    }
-
-
-
-    @AssertTrue(message = "minPowerInWatt should be less than maxPowerInWatt")
-    public boolean isValid(){
-        return this.minPowerInWatt <= this.maxPowerInWatt;
+        super(); // used only by serializer and deserializer
     }
 
     public SimulatedCaptor(String name, Site site, Integer minPowerInWatt, Integer maxPowerInWatt) {
-        super(name, site);
+        super(name, site, PowerSource.SIMULATED);
         this.minPowerInWatt = minPowerInWatt;
         this.maxPowerInWatt = maxPowerInWatt;
     }
@@ -48,5 +40,10 @@ public class SimulatedCaptor extends Captor {
 
     public void setMaxPowerInWatt(Integer maxPowerInWatt) {
         this.maxPowerInWatt = maxPowerInWatt;
+    }
+
+    @AssertTrue(message = "minPowerInWatt should be less than maxPowerInWatt")
+    public boolean isValid(){
+        return this.minPowerInWatt <= this.maxPowerInWatt;
     }
 }

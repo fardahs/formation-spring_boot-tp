@@ -7,20 +7,20 @@ import javax.validation.constraints.Size;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+
 @Entity
 public class Site {
     /**
      * Site id
      */
     @Id
-    private String id = UUID.randomUUID().toString();
+    private String id;
 
     /**
      * Site name
      */
-
     @NotNull
-    @Size(min = 3, max = 100)
+    @Size(min = 3, max = 100, message = "size must be between 3 and 100")
     private String name;
 
     /**
@@ -32,22 +32,14 @@ public class Site {
     @Version
     private int version;
 
-    @Deprecated
     public Site() {
         // Use for serializer or deserializer
     }
 
-    @AssertTrue(message = "must not be null")
-    public boolean isValid(){
-
-        return true;
-    }
-
-    @AssertTrue(message = "size must be between 3 and 100")
-
 
     /**
      * Constructor to use with required property
+     *
      * @param name
      */
     public Site(String name) {
@@ -106,5 +98,16 @@ public class Site {
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 '}';
+    }
+
+    @AssertTrue(message = "must not be null")
+    public boolean isValid() {
+        return this.name != null;
+    }
+
+
+    @PrePersist
+    public void generateId() {
+        this.id = UUID.randomUUID().toString();
     }
 }
