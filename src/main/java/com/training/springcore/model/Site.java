@@ -1,32 +1,45 @@
 package com.training.springcore.model;
 
+import javax.persistence.*;
+import javax.validation.constraints.AssertTrue;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
+@Entity
 public class Site {
     /**
      * Site id
      */
-    private String id = UUID.randomUUID().toString();
+    @Id
+    private String id;
 
     /**
      * Site name
      */
+    @NotNull
+    @Size(min = 3, max = 100, message = "size must be between 3 and 100")
     private String name;
 
     /**
      * Site captors
      */
+    @OneToMany(mappedBy = "site")
     private Set<Captor> captors;
 
-    @Deprecated
+    @Version
+    private int version;
+
     public Site() {
         // Use for serializer or deserializer
     }
 
+
     /**
      * Constructor to use with required property
+     *
      * @param name
      */
     public Site(String name) {
@@ -57,6 +70,14 @@ public class Site {
         this.captors = captors;
     }
 
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -76,7 +97,17 @@ public class Site {
         return "Site{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
-                ", captors=" + captors +
                 '}';
+    }
+
+    @AssertTrue(message = "must not be null")
+    public boolean isValid() {
+        return this.name != null;
+    }
+
+
+    @PrePersist
+    public void generateId() {
+        this.id = UUID.randomUUID().toString();
     }
 }

@@ -9,6 +9,7 @@ import java.util.Set;
 @Component
 @ConfigurationProperties(prefix = "bigcorp")
 public class BigCorpApplicationProperties {
+
     private String name;
     private Integer version;
     private Set<String> emails;

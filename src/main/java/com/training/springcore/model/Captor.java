@@ -1,53 +1,73 @@
 package com.training.springcore.model;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Objects;
 import java.util.UUID;
 
-public class Captor {
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public abstract class Captor {
     /**
      * Captor id
      */
-    private String id = UUID.randomUUID().toString();
+    @Id
+    private String id;
 
     /**
      * Captor name
      */
+    @NotNull
+    @Size(min = 3, max = 100)
     private String name;
 
-    /**
-     * Power source
-     */
-    private PowerSource powerSource;
+    @Version
+    private int version;
 
     /**
      * Site
      */
+    @ManyToOne
     private Site site;
 
-    @Deprecated
+    @Enumerated(EnumType.STRING)
+    @NotNull
+    private PowerSource powerSource;
+
     public Captor() {
         // Use for serializer or deserializer
     }
 
-    /**
-     * Constructor to use with required property
-     * @param name, power source
-     */
-    public Captor(String name, PowerSource powerSource) {
+
+    public Captor(String id, String name, Site site) {
+        this.id = id;
         this.name = name;
-        this.powerSource = powerSource;
         this.site = site;
 
     }
 
     /**
      * Constructor to use with required property
+     *
      * @param name
+     * @param site
      */
     public Captor(String name, Site site) {
         this.name = name;
         this.site = site;
 
+    }
+
+    public Captor(String name, Site site, PowerSource powerSource) {
+        this.name = name;
+        this.site = site;
+        this.powerSource = powerSource;
+    }
+
+    @PrePersist
+    public void generateId() {
+        this.id = UUID.randomUUID().toString();
     }
 
     public String getId() {
@@ -66,8 +86,13 @@ public class Captor {
         this.name = name;
     }
 
-    public PowerSource getPowerSource() {
-        return powerSource;
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 
     public Site getSite() {
@@ -78,22 +103,25 @@ public class Captor {
         this.site = site;
     }
 
+    public PowerSource getPowerSource() {
+        return powerSource;
+    }
+
     public void setPowerSource(PowerSource powerSource) {
         this.powerSource = powerSource;
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Captor site = (Captor) o;
-        return Objects.equals(name, site.name) && Objects.equals(powerSource, site.powerSource);
+        return Objects.equals(name, site.name);
     }
-
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(name, powerSource);
+        return Objects.hash(name, site, id);
     }
 
     @Override
@@ -101,7 +129,8 @@ public class Captor {
         return "Captor{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
-                ", powerSource='" + powerSource + '\'' +
+                ", site='" + site + '\'' +
                 '}';
     }
+
 }

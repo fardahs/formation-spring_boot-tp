@@ -1,18 +1,16 @@
 package com.training.springcore.service;
 
 import com.training.springcore.model.Captor;
-import com.training.springcore.model.PowerSource;
+import com.training.springcore.model.RealCaptor;
 import com.training.springcore.model.Site;
 import com.training.springcore.repository.CaptorDao;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
 import java.util.Set;
@@ -49,7 +47,7 @@ public class CaptorServiceImplTest {
         // Initialisation
         String siteId = "siteId";
 
-        Captor expectedCaptor = new Captor("Capteur A", new Site("Florange"));
+        Captor expectedCaptor = new RealCaptor("Capteur A", new Site("site"));;
         Mockito.when(captorDao.findBySiteId(siteId)).thenReturn(Arrays.asList(expectedCaptor));
 
         // Appel du SUT

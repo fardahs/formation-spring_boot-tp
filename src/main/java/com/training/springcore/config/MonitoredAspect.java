@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Aspect
 public class MonitoredAspect {
+
     private final static Logger logger = LoggerFactory.getLogger(MonitoredAspect.class);
 
     @Before("@annotation(Monitored)")
@@ -22,12 +23,13 @@ public class MonitoredAspect {
 
     @AfterReturning(pointcut = "@annotation(Monitored)", returning = "element")
     public void logServiceAfterCall(JoinPoint jp, Object element) {
+
         if (element == null) {
             logger.info("Finder "+ jp.getTarget() +" returns null ");
 
         } else {
-            logger.info("Finder " +jp.getTarget() + " returns "
-                    + element.toString() + " Fin.");
+            logger.info("Finder " + jp.getTarget() +
+                      " returns " + element.toString() + " Fin.");
 
         }
     }

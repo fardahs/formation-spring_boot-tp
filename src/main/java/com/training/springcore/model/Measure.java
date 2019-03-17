@@ -1,14 +1,33 @@
 package com.training.springcore.model;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import java.time.Instant;
 import java.util.Objects;
 
+@Entity
 public class Measure {
 
-    private Instant instant;
-    private Integer valueInWatt;
-    private Captor captor;
+    @Id
+    @GeneratedValue
     private Long id;
+
+    @NotNull
+    @Past
+    private Instant instant;
+
+    @NotNull
+    private Integer valueInWatt;
+
+    @ManyToOne
+    private Captor captor;
+
+    @Version
+    private int version;
+
+    public Measure() {
+    }
 
     /**
      * Constructeur to use with required property
@@ -53,6 +72,14 @@ public class Measure {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 
     @Override

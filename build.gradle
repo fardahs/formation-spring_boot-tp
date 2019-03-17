@@ -3,6 +3,10 @@ plugins {
 	id 'java'
 }
 
+bootRun{
+	sourceResources sourceSets.main
+}
+
 apply plugin: 'io.spring.dependency-management'
 
 group = 'com.training.springcore'
@@ -15,11 +19,11 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-aop'
-	//implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	//implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	compile('com.h2database:h2')
+	implementation 'org.springframework.boot:spring-boot-starter-mustache'
 	
 	runtimeOnly 'org.springframework.boot:spring-boot-devtools'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'

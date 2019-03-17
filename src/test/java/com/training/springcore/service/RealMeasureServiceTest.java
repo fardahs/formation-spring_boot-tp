@@ -1,9 +1,6 @@
 package com.training.springcore.service;
 
-import com.training.springcore.model.Captor;
-import com.training.springcore.model.Measure;
-import com.training.springcore.model.MeasureStep;
-import com.training.springcore.model.PowerSource;
+import com.training.springcore.model.*;
 import com.training.springcore.service.measure.RealMeasureService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,7 +35,7 @@ public class RealMeasureServiceTest {
     /**
      * Captor used in tests
      */
-    private Captor captor = new Captor("test", PowerSource.REAL);
+    private Captor captor = new RealCaptor("Eolienne", new Site("site"));
     /**
      * Start instant used in tests
      */
