@@ -2,10 +2,6 @@ HELP.md
 .gradle
 /build/
 !gradle/wrapper/gradle-wrapper.jar
-gradlew
-gradlew.bat
-gradle/
-settings.gradle
 
 ### STS ###
 .apt_generated

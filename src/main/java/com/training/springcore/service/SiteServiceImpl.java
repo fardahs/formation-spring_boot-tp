@@ -2,6 +2,8 @@ package com.training.springcore.service;
 
 import com.training.springcore.config.Monitored;
 import com.training.springcore.model.Site;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -19,16 +21,18 @@ public class SiteServiceImpl implements SiteService {
 
     private CaptorService captorService;
 
-    public SiteServiceImpl(CaptorService captorService,  ResourceLoader resourceLoader){
-        System.out.println("Init SiteServiceImpl :" + this);
+    private final static Logger logger = LoggerFactory.getLogger(SiteService.class);
+
+    public SiteServiceImpl(CaptorService captorService, ResourceLoader resourceLoader) {
+        logger.debug("Init SiteServiceImpl :", this);
         this.captorService = captorService;
-        this.resourceLoader=resourceLoader;
+        this.resourceLoader = resourceLoader;
     }
 
     @Override
     @Monitored
     public Site findById(String siteId) {
-        System.out.println("Appel de findById :" + this);
+        logger.debug("Appel de findById :", this);
         if (siteId == null) {
             return null;
         }
@@ -39,18 +43,5 @@ public class SiteServiceImpl implements SiteService {
         return site;
     }
 
-    @Override
-    public void readFile(String path) {
-        Resource resource = resourceLoader.getResource("classpath:lorem.txt");
 
-        try (InputStream stream = resource.getInputStream()) {
-            Scanner scanner = new Scanner(stream).useDelimiter("\\n");
-            while (scanner.hasNext()) {
-                System.out.println(scanner.next());
-            }
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }

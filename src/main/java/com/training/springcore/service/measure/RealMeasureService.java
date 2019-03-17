@@ -1,8 +1,10 @@
 package com.training.springcore.service.measure;
 
+import com.training.springcore.config.properties.BigCorpApplicationProperties;
 import com.training.springcore.model.Captor;
 import com.training.springcore.model.Measure;
 import com.training.springcore.model.MeasureStep;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -14,8 +16,8 @@ import java.util.List;
 @Primary
 @Service("real")
 public class RealMeasureService implements MeasureService {
-    @Value("${bigcorp.measure.default-real}")
-    private Integer defaultValue;
+    @Autowired
+    private BigCorpApplicationProperties properties;
 
     @Override
     public List<Measure> readMeasures(Captor captor, Instant start, Instant end, MeasureStep step) {
@@ -24,7 +26,7 @@ public class RealMeasureService implements MeasureService {
         Instant current = start;
 
         while(current.isBefore(end)){
-            measures.add(new Measure(current, defaultValue, captor));
+            measures.add(new Measure(current, properties.getMeasure().getDefaultReal(), captor));
             current = current.plusSeconds(step.getDurationInSecondes());
         }
         return measures;
