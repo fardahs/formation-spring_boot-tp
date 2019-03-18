@@ -36,7 +36,7 @@ public class FixedMeasureServiceTest {
     /**
      * Captor used in tests
      */
-    private Captor captor = new RealCaptor("Eolienne", new Site("site"));
+    private FixedCaptor captor = new FixedCaptor("Eolienne", new Site("site"));
     /**
      * Start instant used in tests
      */
