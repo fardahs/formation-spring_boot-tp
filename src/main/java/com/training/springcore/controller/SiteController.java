@@ -61,8 +61,8 @@ public class SiteController {
 
     @PostMapping("/{id}/delete")
     public ModelAndView delete(@PathVariable String id) {
-// Comme les capteurs sont liés à un site et les mesures sont liées à un capteur, nous devons faire
-// le ménage avant pour ne pas avoir d'erreur à la suppression d'un site utilisé ailleurs dans la base
+        // Comme les capteurs sont liés à un site et les mesures sont liées à un capteur, nous devons faire
+        // le ménage avant pour ne pas avoir d'erreur à la suppression d'un site utilisé ailleurs dans la base
         Site site = siteDao.findById(id).orElseThrow(IllegalArgumentException::new);
         site.getCaptors().forEach(c -> measureDao.deleteByCaptorId(c.getId()));
         captorDao.deleteBySiteId(id);

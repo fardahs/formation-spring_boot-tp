@@ -18,9 +18,9 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.transaction.Transactional;
 
 @Controller
-@RequestMapping("/sites/{siteId}/captors/FIXED")
+@RequestMapping("/sites/{siteId}/captors/SIMULATED")
 @Transactional
-public class FixedCaptorController {
+public class SimulatedCaptorController {
     @Autowired
     SiteDao siteDao;
     @Autowired
