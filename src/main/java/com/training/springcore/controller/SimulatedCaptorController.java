@@ -1,5 +1,6 @@
 package com.training.springcore.controller;
 
+import com.training.springcore.exception.NotFoundException;
 import com.training.springcore.model.FixedCaptor;
 import com.training.springcore.model.Site;
 import com.training.springcore.repository.CaptorDao;
@@ -35,7 +36,7 @@ public class SimulatedCaptorController {
 
     @GetMapping("/create")
     public ModelAndView create(@PathVariable String siteId, Model model) {
-        Site site = siteDao.findById(siteId).orElseThrow(IllegalArgumentException::new);
+        Site site = siteDao.findById(siteId).orElseThrow(NotFoundException::new);
         return new ModelAndView("captor")
                 .addObject("site", site)
                 .addObject("captor", new FixedCaptor());
@@ -44,7 +45,7 @@ public class SimulatedCaptorController {
     @PostMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public ModelAndView save(@PathVariable String siteId, FixedCaptor captor) {
 
-        Site site = siteDao.findById(siteId).orElseThrow(IllegalArgumentException::new);
+        Site site = siteDao.findById(siteId).orElseThrow(NotFoundException::new);
         FixedCaptor captorToPersist;
 
         if (captor.getId() == null) {
@@ -52,7 +53,7 @@ public class SimulatedCaptorController {
                     captor.getDefaultPowerInWatt());
         } else {
             captorToPersist = (FixedCaptor) captorDao.findById(captor.getId())
-                    .orElseThrow(IllegalArgumentException::new);
+                    .orElseThrow(NotFoundException::new);
             captorToPersist.setName(captor.getName());
             captorToPersist.setDefaultPowerInWatt(captor.getDefaultPowerInWatt());
         }

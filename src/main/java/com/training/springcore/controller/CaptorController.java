@@ -1,6 +1,7 @@
 package com.training.springcore.controller;
 
 import com.training.springcore.controller.dto.CaptorDto;
+import com.training.springcore.exception.NotFoundException;
 import com.training.springcore.model.*;
 import com.training.springcore.repository.CaptorDao;
 import com.training.springcore.repository.MeasureDao;
@@ -59,14 +60,14 @@ public class CaptorController {
     @GetMapping("/{id}")
     public ModelAndView findById(@PathVariable String siteId, @PathVariable String id) {
         Captor captor =
-                captorDao.findById(id).orElseThrow(IllegalArgumentException::new);
+                captorDao.findById(id).orElseThrow(NotFoundException::new);
         return new ModelAndView("captor").addObject("captor", toDto(captor));
     }
 
     @GetMapping("/create")
     public ModelAndView create(@PathVariable String siteId, Model model) {
         Site site =
-                siteDao.findById(siteId).orElseThrow(IllegalArgumentException::new);
+                siteDao.findById(siteId).orElseThrow(NotFoundException::new);
         return new ModelAndView("captor")
                 .addObject("captor",
                         new CaptorDto(site, new FixedCaptor(null, site, null)));
@@ -74,7 +75,7 @@ public class CaptorController {
 
     @PostMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public ModelAndView save(@PathVariable String siteId, CaptorDto captorDto) {
-        Site site = siteDao.findById(siteId).orElseThrow(IllegalArgumentException::new);
+        Site site = siteDao.findById(siteId).orElseThrow(NotFoundException::new);
         Captor captor = captorDto.toCaptor(site);
         captorDao.save(captor);
         return new ModelAndView("site_create").addObject("site", site);
@@ -87,7 +88,7 @@ public class CaptorController {
         captorDao.deleteById(id);
         return new ModelAndView("site_create")
                 .addObject("site",
-                        siteDao.findById(siteId).orElseThrow(IllegalArgumentException::new));
+                        siteDao.findById(siteId).orElseThrow(NotFoundException::new));
     }
 
 }

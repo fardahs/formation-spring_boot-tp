@@ -1,6 +1,7 @@
 package com.training.springcore.controller;
 
 import com.training.springcore.controller.dto.MeasureDto;
+import com.training.springcore.exception.NotFoundException;
 import com.training.springcore.model.Captor;
 import com.training.springcore.model.MeasureStep;
 import com.training.springcore.model.PowerSource;
@@ -33,7 +34,7 @@ public class MesureController {
     @GetMapping
     public List<MeasureDto> findAll(@PathVariable String id, @PathVariable String nbHours) {
 
-        Captor captor = captorDao.findById(id).orElseThrow(IllegalArgumentException::new);
+        Captor captor = captorDao.findById(id).orElseThrow(NotFoundException::new);
 
         if (captor.getPowerSource() == PowerSource.SIMULATED) {
 
