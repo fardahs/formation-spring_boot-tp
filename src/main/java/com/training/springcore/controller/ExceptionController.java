@@ -10,6 +10,7 @@ import java.util.Date;
 
 @ControllerAdvice
 public class ExceptionController {
+
     @ExceptionHandler(NotFoundException.class)
     public ModelAndView handle(NotFoundException e){
         ModelAndView mv = new ModelAndView("/error/404")

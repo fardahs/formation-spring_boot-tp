@@ -1,5 +1,6 @@
 package com.training.springcore.controller;
 
+import com.training.springcore.config.SecurityConfig;
 import com.training.springcore.controller.dto.CaptorDto;
 import com.training.springcore.exception.NotFoundException;
 import com.training.springcore.model.*;
@@ -8,6 +9,7 @@ import com.training.springcore.repository.MeasureDao;
 import com.training.springcore.repository.SiteDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -64,6 +66,7 @@ public class CaptorController {
         return new ModelAndView("captor").addObject("captor", toDto(captor));
     }
 
+    @Secured(SecurityConfig.ROLE_ADMIN)
     @GetMapping("/create")
     public ModelAndView create(@PathVariable String siteId, Model model) {
         Site site =

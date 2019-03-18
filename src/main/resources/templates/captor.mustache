@@ -102,11 +102,13 @@
             </div>
 
             <a class="btn btn-secondary" href="/sites/{{captor.siteId}}">Annuler</a>
+            <input type="hidden" name="{{_csrf.parameterName}}" value="{{_csrf.token}}">
             <button type="submit" class="btn btn-primary">Enregistrer</button>
             {{#captor.id}}
+                <input type="hidden" name="{{_csrf.parameterName}}" value="{{_csrf.token}}">
                 <button type="button" class="btn btn-danger" data-toggle="modal"
-                        data-target="#deleteModal">Supprimer
-                </button>{{/captor.id}}
+                        data-target="#deleteModal">Supprimer</button>
+            {{/captor.id}}
         </form>
 
     </div>
@@ -133,6 +135,8 @@
                               method="post">
                             <button type="button" class="btn btn-secondary" datadismiss="modal">Close
                             </button>
+
+                            <input type="hidden" name="{{_csrf.parameterName}}" value="{{_csrf.token}}">
                             <button type="submit" class="btn btn-danger">Supprimer</button>
                         </form>
                     </div>
