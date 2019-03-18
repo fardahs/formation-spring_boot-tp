@@ -1,5 +1,6 @@
 package com.training.springcore.controller;
 
+import com.training.springcore.config.SecurityConfig;
 import com.training.springcore.exception.NotFoundException;
 import com.training.springcore.model.Site;
 import com.training.springcore.repository.CaptorDao;
@@ -7,6 +8,7 @@ import com.training.springcore.repository.MeasureDao;
 import com.training.springcore.repository.SiteDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,6 +44,7 @@ public class SiteController {
                         siteDao.findById(id).orElseThrow(NotFoundException::new));
     }
 
+    @Secured(SecurityConfig.ROLE_ADMIN)
     @GetMapping("/create")
     public ModelAndView create(Model model) {
         return new ModelAndView("site_create").addObject("site", new Site());
@@ -61,6 +64,7 @@ public class SiteController {
         }
     }
 
+    @Secured(SecurityConfig.ROLE_ADMIN)
     @PostMapping("/{id}/delete")
     public ModelAndView delete(@PathVariable String id) {
         // Comme les capteurs sont liés à un site et les mesures sont liées à un capteur, nous devons faire

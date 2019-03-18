@@ -10,8 +10,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -27,8 +25,7 @@ import javax.sql.DataSource;
 @Configuration
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class SecurityConfig {
-    public static String ROLE_ADMIN = "ADMIN";
-
+    public static final String ROLE_ADMIN = "ADMIN";
 
     @Bean
     public WebSecurityConfigurerAdapter webSecurityConfig(DataSource dataSource) {

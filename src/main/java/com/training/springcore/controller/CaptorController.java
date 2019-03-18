@@ -84,7 +84,7 @@ public class CaptorController {
         return new ModelAndView("site_create").addObject("site", site);
     }
 
-
+    @Secured(SecurityConfig.ROLE_ADMIN)
     @PostMapping("/{id}/delete")
     public ModelAndView delete(@PathVariable String siteId, @PathVariable String id) {
         measureDao.deleteByCaptorId(id);
